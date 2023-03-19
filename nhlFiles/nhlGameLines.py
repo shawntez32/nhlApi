@@ -6,10 +6,10 @@ url = 'https://www.espn.com/nhl/lines'
 
 teams = []
 lines = []
-nfl_game_line = {'home':'','away':'','home_ats':'','away_ats':'',
+nhl_game_line = {'home':'','away':'','home_ats':'','away_ats':'',
                  'home_ml':'','away_ml':'', 'home_spread':'','away_spread':'',
                  'over':'','under':''}
-nfl_game_lines = []
+nhl_game_lines = []
 a = 0
 
 content = requests.get(url)
@@ -52,18 +52,22 @@ for e in range(len(home_ats)):
     oV = over[e]
     try:
         if float(hSpr) < 0: 
-            nfl_game_line = {'home':hTM,'away':aTM,'home_ats':hAts,'away_ats':aAts,
+            nhl_game_line = {'home':hTM,'away':aTM,'home_ats':hAts,'away_ats':aAts,
                     'home_ml':hMl,'away_ml':aMl, 'home_spread':hSpr,'away_spread':float(hSpr) * -1,
                     'over':oV,'under':float(oV) * -1}
-            nfl_game_lines.append(nfl_game_line)
+            nhl_game_lines.append(nhl_game_line)
+        elif hMl[0] == '+':
+            nhl_game_line = {'home':hTM,'away':aTM,'home_ats':hAts,'away_ats':aAts,
+                    'home_ml':hMl,'away_ml':aMl, 'home_spread':float(oV) * -1,'away_spread':oV,
+                    'over':hSpr,'under':float(hSpr) * -1}
+            nhl_game_lines.append(nhl_game_line)     
         else:
-            nfl_game_line = {'home':hTM,'away':aTM,'home_ats':hAts,'away_ats':aAts,
+            nhl_game_line = {'home':hTM,'away':aTM,'home_ats':hAts,'away_ats':aAts,
                     'home_ml':hMl,'away_ml':aMl, 'home_spread':oV,'away_spread':float(oV) * -1,
                     'over':hSpr,'under':float(hSpr) * -1}
-            nfl_game_lines.append(nfl_game_line)
+            nhl_game_lines.append(nhl_game_line)
     except:
         pass
-    a += 1
 
 class GameLine:
     def __init__(self,home,away,home_ats,away_ats,home_ml,away_ml,home_spread,away_spread,over,under,home_odds,away_odds):
