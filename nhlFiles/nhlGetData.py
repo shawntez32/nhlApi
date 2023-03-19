@@ -92,20 +92,24 @@ def getStats(team,year):
         if a > 0:
             x = x.lower()
         a += 1
+    up = team.upper()
     filename = os.path.join(dirname, f'nhlDb/{team}-{year}-stats.db')
-    filename2 = os.path.join(dirname, f'nhlDb/{team.upper()}-{year}-stats.db')
-    filename3 = os.path.join(dirname, f"nhlDb/{team.upper()}-{year}-hockey.db")
+    filename2 = os.path.join(dirname, f'nhlDb/{up}-{year}-stats.db')
+    filename3 = os.path.join(dirname, f"nhlDb/{up}-{year}-hockey.db")
     try:
         conn = sqlite3.connect(filename)
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM Stats2")
     except:
         try:
             conn = sqlite3.connect(filename2)
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM Stats2")
         except:
             conn = sqlite3.connect(filename3)
-    cur = conn.cursor()
-    try:
-        cur.execute("SELECT * FROM Stats")
-    except:
-        cur.execute("SELECT * FROM Stats2")
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM Stats")
     rows = cur.fetchall()
     return rows
+
+getStats("Det",2021)
